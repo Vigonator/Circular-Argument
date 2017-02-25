@@ -8,7 +8,7 @@ public class playerMovement : MonoBehaviour {
 
     public float gravity = 9.81f;
 
-    private Vector2 verticalVelocity;
+    private float verticalVelocity;
 
     private bool falling = true;
 
@@ -22,23 +22,21 @@ public class playerMovement : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		
-        if(falling == true)
-        {
+
             fall();
 
             
 
-            Debug.Log("onCollisionEnter");
-        }
+
 
         adjustAngle();
-
+        jump();
         movement();
     }
 
-    public void OnTriggerEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         Debug.Log("onCollisionEnter");
 
@@ -46,13 +44,14 @@ public class playerMovement : MonoBehaviour {
         Vector3 colliderPosition = collision.contacts[0].point;
         Vector3 colliderWorldPosition = (colliderPosition - world.transform.position);
 
-        float contactAngle = Vector3.Angle(new Vector2(colliderNormal.x, colliderNormal.y), new Vector2(colliderNormal.x, colliderNormal.y));
+        float contactAngle = Vector3.Angle(new Vector2(colliderNormal.x, colliderNormal.y), new Vector2(this.transform.position.x, this.transform.position.y));
 
         if (contactAngle < 90)
         {
             floor = collision;
             falling = false;
             Debug.Log("floor");
+            verticalVelocity = 0;
         }
 
         else
@@ -63,7 +62,7 @@ public class playerMovement : MonoBehaviour {
 
     }
 
-    private void OnTriggerExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
 
         Debug.Log("onCollisionExit");
@@ -91,9 +90,24 @@ public class playerMovement : MonoBehaviour {
             float playerWorldAngle = Vector3.Dot(this.gameObject.transform.position, Vector3.up);
             float playerWallAngle = Vector3.Dot(wall.contacts[0].point, Vector3.up);
 
-            if(playerWorldAngle > playerWallAngle  )
+            Debug.Log("playerWallAngle"+playerWallAngle);
+            Debug.Log("playerWorldAngle" + playerWorldAngle);
+            
+            if (playerWorldAngle < playerWallAngle && horizontalMovement < 0)
             {
+                Debug.Log("wall is on the left");
 
+            }
+
+            else if (playerWorldAngle > playerWallAngle && horizontalMovement > 0)
+            {
+                Debug.Log("wall is on the right");
+
+            }
+
+            else
+            {
+                this.gameObject.transform.RotateAround(world.transform.position, Vector3.forward, -horizontalMovement * 35 * Time.deltaTime);
             }
         }
         else
@@ -103,7 +117,7 @@ public class playerMovement : MonoBehaviour {
     }
 
 
-    void onTriggerStay(Collider other)
+    void onCollisionStay(Collider other)
     {
         
 
@@ -114,7 +128,7 @@ public class playerMovement : MonoBehaviour {
     {
         if(floor!=null)
         { 
-        this.gameObject.transform.rotation = Quaternion.LookRotation(floor.contacts[0].point);
+        this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, this.transform.position);
         }
     }
 
@@ -126,7 +140,23 @@ public class playerMovement : MonoBehaviour {
         Vector3 playerPosition = this.transform.position;
         Vector3 direction = Vector3.Normalize(origin - playerPosition);
 
-        this.transform.Translate(direction * gravity * Time.deltaTime, Space.World);
+        if(verticalVelocity < 30 && falling)
+        {
+            verticalVelocity += gravity;
+        }
+
+
+        this.transform.Translate(direction * verticalVelocity * Time.deltaTime, Space.World);
+    }
+
+    void jump()
+    {
+        
+
+        if(Input.GetButtonDown("Jump") && !falling)
+        {
+            verticalVelocity -= 10;
+        }
     }
 
 
