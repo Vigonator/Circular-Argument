@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour {
 
-    public GameObject world;
 
+    public GameObject world;
     public float gravity = 9.81f;
 
+
+
     private float verticalVelocity;
-
     private bool falling = true;
-
     private const float wallAngle = 90.0f;
+    private Collision floor, wall;
 
-    private Collision floor;
-    private Collision wall;
     // Use this for initialization
     void Start () {
 		
@@ -24,16 +23,12 @@ public class playerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		
+        movement();
 
-            fall();
-
-            
-
-
+        fall();
+        jump();
 
         adjustAngle();
-        jump();
-        movement();
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -114,6 +109,8 @@ public class playerMovement : MonoBehaviour {
         {
             this.gameObject.transform.RotateAround(world.transform.position, Vector3.forward, -horizontalMovement * 35 * Time.deltaTime);
         }
+
+
     }
 
 
@@ -132,21 +129,36 @@ public class playerMovement : MonoBehaviour {
         }
     }
 
+    Vector3 fallAttempt()
+    {
+        Vector3 retTransform = Vector3.zero;
 
+        if(falling)
+        {
+
+            Vector3 origin = world.transform.position;
+            Vector3 playerPosition = this.transform.position;
+            Vector3 direction = Vector3.Normalize(origin - playerPosition);
+
+            if (verticalVelocity < 30)
+            {
+                verticalVelocity += gravity;
+            }
+
+            retTransform = direction * verticalVelocity * Time.deltaTime;
+
+
+        }
+
+        return retTransform;
+    }
 
     void fall()
     {
-        Vector3 origin = world.transform.position;
-        Vector3 playerPosition = this.transform.position;
-        Vector3 direction = Vector3.Normalize(origin - playerPosition);
-
-        if(verticalVelocity < 30 && falling)
-        {
-            verticalVelocity += gravity;
-        }
+        
 
 
-        this.transform.Translate(direction * verticalVelocity * Time.deltaTime, Space.World);
+        this.transform.Translate(fallAttempt(), Space.World);
     }
 
     void jump()
@@ -155,7 +167,7 @@ public class playerMovement : MonoBehaviour {
 
         if(Input.GetButtonDown("Jump") && !falling)
         {
-            verticalVelocity -= 10;
+            verticalVelocity = -10;
         }
     }
 
