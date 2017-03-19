@@ -30,9 +30,9 @@ public class playerMovement : MonoBehaviour
     {
         Debug.Log("Frame Count: " + Time.frameCount);
 
-        movement();
+        move();
         // fall();
-        jump();
+        // jump();
         // adjustAngle();
     }
     // On collision enter
@@ -92,12 +92,13 @@ public class playerMovement : MonoBehaviour
         }
     }
     */
-
+    
+    /*
     void movement()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
 
-        /*
+        
         if (wall != null)
         {
             Debug.Log("there is a wall to either side");
@@ -119,15 +120,24 @@ public class playerMovement : MonoBehaviour
         }
         else
         {
-        */
+        
             move(horizontalMovement);
-        // }
+         }
+         
     }
-    void move(float horizontalMovement) {
+    */
+
+    void move() {
+
+        float horizontalMovement = Input.GetAxis("Horizontal");
 
         Rigidbody rb = GetComponent<Rigidbody>();
 
-        rb.AddRelativeForce(horizontalMovement * 10,0,0);
+        Debug.Log("horizontal movement axis is: "+horizontalMovement);
+        Debug.Log("RigidBody rb is: " + rb);
+
+
+        rb.AddRelativeForce(0,horizontalMovement * 10,0);
 
         //this.gameObject.transform.RotateAround(world.transform.position, Vector3.forward, -horizontalMovement * 35 * Time.deltaTime);
     }

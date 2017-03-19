@@ -74,13 +74,23 @@ public class Gravity : MonoBehaviour {
             }
         }
     }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (floor == collision) ;
+        floor = collision;
+    }
 
 
-        void orientToFloor()
+    void orientToFloor()
     {
         if (floor != null)
         {
-            this.transform.rotation = Quaternion.LookRotation(floor.contacts[0].normal);
+            this.gameObject.transform.rotation = Quaternion.LookRotation(floor.contacts[0].normal);
+        }
+
+        else
+        {
+            this.gameObject.transform.LookAt(2 * transform.position - world.transform.position);
         }
     }
 
