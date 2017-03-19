@@ -31,11 +31,13 @@ public class playerMovement : MonoBehaviour
         Debug.Log("Frame Count: " + Time.frameCount);
 
         movement();
-        fall();
+        // fall();
         jump();
-        adjustAngle();
+        // adjustAngle();
     }
     // On collision enter
+
+    /*
     public void OnCollisionEnter(Collision collision)
     {
         
@@ -67,7 +69,9 @@ public class playerMovement : MonoBehaviour
             Debug.Log("entered " + collision.gameObject.name + " as wall");
         }
     }
+    */
 
+        /*
     private void OnCollisionExit(Collision collision)
     {
         collision.gameObject.GetComponent<MeshRenderer>().material = ExitColor;
@@ -87,11 +91,13 @@ public class playerMovement : MonoBehaviour
             Debug.Log("wall set to null");
         }
     }
+    */
 
     void movement()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
 
+        /*
         if (wall != null)
         {
             Debug.Log("there is a wall to either side");
@@ -113,15 +119,24 @@ public class playerMovement : MonoBehaviour
         }
         else
         {
+        */
             move(horizontalMovement);
-        }
+        // }
     }
-    void move(float horizontalMovement) { this.gameObject.transform.RotateAround(world.transform.position, Vector3.forward, -horizontalMovement * 35 * Time.deltaTime); }
+    void move(float horizontalMovement) {
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        rb.AddRelativeForce(horizontalMovement * 10,0,0);
+
+        //this.gameObject.transform.RotateAround(world.transform.position, Vector3.forward, -horizontalMovement * 35 * Time.deltaTime);
+    }
     void onCollisionStay(Collider other)
     {
 
     }
 
+    /*
     void adjustAngle()
     {
         if (floor != null)
@@ -129,7 +144,9 @@ public class playerMovement : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, this.transform.position);
         }
     }
+    */
 
+        /*
     Vector3 fallAttempt()
     {
         Vector3 retTransform = Vector3.zero;
@@ -152,7 +169,7 @@ public class playerMovement : MonoBehaviour
     {
         this.transform.Translate(fallAttempt(), Space.World);
     }
-
+    */
     void jump()
     {
         if (Input.GetButtonDown("Jump") && !falling)
