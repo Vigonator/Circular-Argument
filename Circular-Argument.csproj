@@ -81,7 +81,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Beam1.cs" />
     <Compile Include="Assets\Scripts\Gravity.cs" />
+    <Compile Include="Assets\Scripts\Weapons.cs" />
     <Compile Include="Assets\Scripts\cameraMovement.cs" />
     <Compile Include="Assets\Scripts\playerMovement.cs" />
   </ItemGroup>

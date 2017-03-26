@@ -7,7 +7,7 @@ public class Gravity : MonoBehaviour {
     GameObject world;
     public float gravityStrength;
     Rigidbody rb;
-    Vector3 fallingDirection;
+    public Vector3 fallingDirection;
 
     Collision floor;
 
@@ -18,13 +18,13 @@ public class Gravity : MonoBehaviour {
         world = GameObject.FindWithTag("World");
         Debug.Log("world is set to " + world.gameObject.name + ".");
 
-        Debug.Log("gravity is set to "+gravityStrength+" per deltatime i guess?");
+        Debug.Log("gravity is set to "+gravityStrength);
     }
 	
 	// Update is called once per frame
 	void Update () {
         fall();
-        orientToFloor();
+   
     }
 
 
@@ -34,10 +34,10 @@ public class Gravity : MonoBehaviour {
 
         fallingDirection = new Vector3(world.transform.position.x - this.transform.position.x, world.transform.position.y - this.transform.position.y, 0);
         
-
         rb.AddForce(fallingDirection.normalized.x * gravityStrength, fallingDirection.normalized.y * gravityStrength,0);
 
-        
+
+        Debug.Log("Falling direction: x: " + fallingDirection.normalized.x +"y: " + fallingDirection.normalized.y);
     }
 
 
@@ -74,24 +74,17 @@ public class Gravity : MonoBehaviour {
             }
         }
     }
+
     private void OnCollisionStay(Collision collision)
     {
-        if (floor == collision) ;
-        floor = collision;
+        if (floor == collision)
+        {
+            floor = collision;
+        }
+        
     }
 
 
-    void orientToFloor()
-    {
-        if (floor != null)
-        {
-            this.gameObject.transform.rotation = Quaternion.LookRotation(floor.contacts[0].normal);
-        }
-
-        else
-        {
-            this.gameObject.transform.LookAt(2 * transform.position - world.transform.position);
-        }
-    }
+    
 
     }
