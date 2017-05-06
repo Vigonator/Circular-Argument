@@ -27,7 +27,8 @@ public class cameraMovement : MonoBehaviour
         movVector *= movVectorFac;
 
         this.transform.Translate(movVector, Space.World);
-        this.transform.rotation = Player.transform.rotation;
+        this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, this.transform.position);
+        //  this.transform.rotation = Player.transform.rotation;
 
 
     }
