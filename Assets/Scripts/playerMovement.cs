@@ -13,16 +13,19 @@ public class playerMovement : MonoBehaviour
 
 
     Vector3 worldCenter;
+    GameObject face;
 
     // Use this for initialization
     void Start()
     {
-
+        face = GameObject.Find("Player/Face");
     }
 
     // Update is called once per frame
     void Update()
     {
+        this.transform.LookAt(face.transform.position);
+
         if (Input.GetButtonDown("Jump"))
         {
             this.GetComponent<Rigidbody>().AddForce(-this.GetComponent<Gravity>().fallingDirection.normalized * 15, ForceMode.Impulse);

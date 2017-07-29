@@ -6,14 +6,16 @@ public class Weapons : MonoBehaviour {
 
     protected float range, damage, cycleTime ;
     Vector3 ray;
+    protected Vector3 mouseToWorld;
     public int ammo;
     float nextCycle;
+    protected GameObject player;
 
 
     // Use this for initialization
     void Start () {
-		
-	}
+        player = GameObject.FindWithTag("Player");
+    }
 
     // Update is called once per frame
     void Update()
@@ -38,10 +40,14 @@ public class Weapons : MonoBehaviour {
 
     private void getAim()
     {
-        ray = Input.mousePosition - this.transform.position;
+        mouseToWorld = Input.mousePosition;
+        mouseToWorld = Camera.main.ScreenToWorldPoint(mouseToWorld);
+        mouseToWorld.z = player.transform.position.z;
+
+        
     }
 
-    protected void fire()
+    virtual protected void fire()
     {
 
     }

@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Beam1 : Weapons {
 
+    
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        player = GameObject.FindWithTag("Player");
+    }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	override protected void fire()
+    {
+        GameObject newBeam = (GameObject)Instantiate(Resources.Load("Beam"));
+
+        newBeam.GetComponent<BeamRenderer>().start = player.gameObject.transform.position;
+        newBeam.GetComponent<BeamRenderer>().end = mouseToWorld;
+
+        newBeam.GetComponent<BeamRenderer>().duration = 2.0f;
+    }
 }

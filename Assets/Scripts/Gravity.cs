@@ -37,7 +37,7 @@ public class Gravity : MonoBehaviour {
         rb.AddForce(fallingDirection.normalized.x * gravityStrength, fallingDirection.normalized.y * gravityStrength,0);
 
 
-        Debug.Log("Falling direction: x: " + fallingDirection.normalized.x +"y: " + fallingDirection.normalized.y);
+        
     }
 
 
